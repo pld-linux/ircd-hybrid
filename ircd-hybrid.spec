@@ -1,5 +1,9 @@
 # TODO:
 # - add modyfications for use system avalaible shared adns library.
+# - rewrite ipv6 support to work with non-v6 systems
+#
+# Conditional build:
+# _without_ipv6		- disable ipv6 support - need for v4-only machines. 
 #
 Summary:	Internet Relay Chat Server
 Summary(pl):	Serwer IRC
@@ -51,8 +55,9 @@ cp -f %{_datadir}/automake/config.* autoconf
 aclocal
 %{__autoconf}
 CFLAGS="%{rpmcflags} %{?debug:-DDEBUGMODE}"
-%configure	--enable-zlib \
-		--enable-ipv6 \
+%configure \
+		--enable-zlib \
+		%{!?_without_ipv6:--enable-ipv6} \
 		--enable-small-net \
 		--disable-ssl \
 		--with-nicklen=12 \
