@@ -9,7 +9,7 @@ Summary:	Internet Relay Chat Server
 Summary(pl):	Serwer IRC
 Name:		ircd-hybrid
 Version:	7beta15
-Release:	2
+Release:	3
 License:	GPL v1
 Group:		Daemons
 Source0:	http://www.ircd-hybrid.org/.beta/oxpk99/%{name}-%{version}.tgz
@@ -19,12 +19,14 @@ Patch0:		%{name}-config.patch
 #Patch1:	%{name}-ac25x.patch
 #Patch2:	%{name}-ac_fixes.patch
 Patch3:		%{name}-change_uid.patch
+Patch4:		%{name}-va.patch
+Patch5:		%{name}-opt.patch
 URL:		http://www.ircd-hybrid.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	zlib-devel
-BuildRequires:	byacc
+BuildRequires:	bison
 BuildRequires:	flex
+BuildRequires:	zlib-devel
 Prereq:		rc-scripts
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/bin/id
@@ -56,6 +58,8 @@ IPv6.
 #%patch1 -p1
 #%patch2 -p1
 %patch3	-p1
+%patch4 -p1
+%patch5 -p1
 
 %build
 mv -f autoconf/configure.in .
@@ -99,7 +103,7 @@ cd tools
 cd ..
 
 cd help
-	install opers/* users/* $RPM_BUILD_ROOT%{_libdir}/ircd/help
+	cp -rf opers users $RPM_BUILD_ROOT%{_libdir}/ircd/help
 cd ..
 
 %clean
