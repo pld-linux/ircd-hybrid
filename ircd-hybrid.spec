@@ -122,11 +122,12 @@ fi
 %defattr(644,root,root,755)
 %doc doc/*.gz
 %attr(755,root,root) %{_sbindir}/*
+%attr(770,root,ircd) %dir %{_sysconfdir}
+%attr(660,ircd,ircd) %config(noreplace) %{_sysconfdir}/ircd.conf
+%attr(754,root,root) /etc/rc.d/init.d/ircd
+%attr(644,root,root) /etc/sysconfig/ircd
+%dir %{_libdir}/ircd
 %attr(755,root,root) %{_libdir}/ircd/
 %attr(770,root,ircd) %dir %{_var}/log/ircd
 %attr(770,root,ircd) %dir %{_localstatedir}
-%attr(770,root,ircd) %dir %{_sysconfdir}
-%attr(660,ircd,ircd) %config(noreplace) %{_sysconfdir}/ircd.conf
 %{_mandir}/man*/*
-%attr(754,root,root) /etc/rc.d/init.d/ircd
-%attr(644,root,root) /etc/sysconfig/ircd
