@@ -15,7 +15,7 @@ Summary:	Internet Relay Chat Server
 Summary(pl):	Serwer IRC
 Name:		ircd-hybrid
 Version:	7.0.2
-Release:	1
+Release:	2
 Epoch:		1
 License:	GPL v2
 Group:		Daemons
@@ -45,6 +45,8 @@ Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	ircd
 Obsoletes:	ircd6
+Obsoletes:	ircd-ptlink
+Obsoletes:	bircd
 
 %define		_sysconfdir	/etc/ircd
 %define		_localstatedir	/var/lib/ircd
