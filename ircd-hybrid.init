@@ -1,9 +1,9 @@
 #!/bin/sh
 #
-# ircd       This shell script takes care of starting and stopping ircd.
+# ircd		This shell script takes care of starting and stopping ircd.
 #
-# chkconfig: 234 75 30
-# description: Internet Relay Chat Server.
+# chkconfig:	234 75 30
+# description:	Internet Relay Chat Server.
 #
 
 # Source function library.
@@ -16,32 +16,42 @@
 [ -f /etc/sysconfig/ircd ] && . /etc/sysconfig/ircd
 
 # Check that networking is up.
-if is_no "${NETWORKING}"; then
-	msg_network_down IRCd
-	exit 1
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network ]; then
+		msg_network_down "IRCd Server"
+		exit 1
+	fi
+else
+	exit 0
 fi
 
 
 # See how we were called.
 case "$1" in
   start)
-	# Start daemons.
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/ircd ]; then
+		# Start daemons.
 		msg_starting "IRCd Server"
 		daemon ircd
+		touch /var/lock/subsys/ircd
 	else
-		msg_already_running IRCd
+		msg_already_running "IRCd Server"
 		exit 1
 	fi
-	touch /var/lock/subsys/ircd
 	;;
   stop)
-	# Stop daemons.
-	msg_stopping "IRCd Server"
-	killproc ircd
-	rm -f /var/run/ircd.pid
-	rm -f /var/lock/subsys/ircd
+	# Check if the service is already running?
+	if [ -f /var/lock/subsys/ircd ]; then
+		# Stop daemons.
+		msg_stopping "IRCd Server"
+		killproc ircd
+		rm -f /var/run/ircd.pid
+		rm -f /var/lock/subsys/ircd
+	else
+		msg_already_running "IRCd Server"
+		exit 1
+	fi
 	;;
   restart|reload)
   	$0 stop
@@ -56,4 +66,3 @@ case "$1" in
 esac
 
 exit 0
-
