@@ -8,12 +8,12 @@
 Summary:	Internet Relay Chat Server
 Summary(pl):	Serwer IRC
 Name:		ircd-hybrid
-Version:	7.0rc9
+Version:	7.0rc10
 Release:	1
 License:	GPL v1
 Group:		Daemons
 Source0:	http://www.ircd-hybrid.org/.beta/oxpk99/%{name}-%{version}.tgz
-# Source0-md5:	1fc28c00e981fbe597c941fba2ef5d60
+# Source0-md5:	b5cabcace16cbacd61699c18db81f48f
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-config.patch
@@ -29,12 +29,12 @@ BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	zlib-devel
 Prereq:		rc-scripts
-Requires(pre): /usr/bin/getgid
-Requires(pre): /bin/id
-Requires(pre): /usr/sbin/groupadd
-Requires(pre): /usr/sbin/useradd
-Requires(postun):      /usr/sbin/userdel
-Requires(postun):      /usr/sbin/groupdel
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/bin/id
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires(postun):	/usr/sbin/userdel
+Requires(postun):	/usr/sbin/groupdel
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	ircd
@@ -63,7 +63,7 @@ IPv6.
 %patch5 -p1
 
 %build
-mv -f autoconf/configure.in .
+mv -f autoconf/{configure.in,acconfig.h} .
 cp -f %{_datadir}/automake/config.* autoconf
 %{__aclocal}
 %{__autoconf}
