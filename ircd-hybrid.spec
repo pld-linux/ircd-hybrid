@@ -23,10 +23,8 @@ Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}.tgz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-config.patch
-Patch3:		%{name}-change_uid.patch
-Patch4:		%{name}-va.patch
-Patch5:		%{name}-opt.patch
-Patch6:		%{name}-axp.patch
+Patch1:		%{name}-change_uid.patch
+Patch2:		%{name}-opt.patch
 URL:		http://www.ircd-hybrid.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -61,12 +59,8 @@ IPv6.
 %prep
 %setup -q
 %patch0 -p1
-%patch3	-p1
-%patch4 -p1
-%patch5 -p1
-%ifarch alpha
-%patch6 -p1
-%endif
+%patch1	-p1
+%patch2 -p1
 
 %build
 mv -f autoconf/{configure.in,acconfig.h} .
