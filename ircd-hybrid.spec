@@ -3,7 +3,7 @@
 # - rewrite ipv6 support to work with non-v6 systems
 #
 # Conditional build:
-# _with_ipv6		- enable ipv6 support - do not use for v4-only machines. 
+# _with_ipv6		- enable ipv6 support - do not use for v4-only machines.
 #
 Summary:	Internet Relay Chat Server
 Summary(pl):	Serwer IRC
@@ -23,6 +23,8 @@ URL:		http://www.ircd-hybrid.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	zlib-devel
+BuildRequires:	byacc
+BuildRequires:	flex
 Prereq:		rc-scripts
 Prereq:		/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -141,7 +143,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc doc/{*.txt,*.conf} RELNOTES ChangeLog Hybrid-team opers.txt
+%doc doc/{*.txt,*.conf,server-version-info,technical} RELNOTES ChangeLog Hybrid-team BUGS TODO
 %attr(755,root,root) %{_sbindir}/*
 %attr(770,root,ircd) %dir %{_sysconfdir}
 %attr(660,ircd,ircd) %config(noreplace) %{_sysconfdir}/ircd.conf
