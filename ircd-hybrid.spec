@@ -85,7 +85,7 @@ CFLAGS="%{rpmcflags} %{?debug:-DDEBUGMODE}"
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_libdir}/ircd,%{_var}/log/ircd,%{_sysconfdir}} \
 	$RPM_BUILD_ROOT{%{_libdir}/ircd/{modules{,/autoload},tools,help},%{_sbindir},%{_mandir}/man8} \
-	$RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},%{_localstatedir}}
+	$RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},%{_localstatedir},/var/run/ircd}
 
 install src/ircd $RPM_BUILD_ROOT%{_sbindir}/ircd
 install servlink/servlink $RPM_BUILD_ROOT%{_sbindir}/servlink
