@@ -25,6 +25,7 @@ Patch0:		%{name}-config.patch
 Patch3:		%{name}-change_uid.patch
 Patch4:		%{name}-va.patch
 Patch5:		%{name}-opt.patch
+Patch6:		%{name}-axp.patch
 URL:		http://www.ircd-hybrid.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -62,6 +63,9 @@ IPv6.
 %patch3	-p1
 %patch4 -p1
 %patch5 -p1
+%ifarch alpha
+%patch6 -p1
+%endif
 
 %build
 mv -f autoconf/{configure.in,acconfig.h} .
