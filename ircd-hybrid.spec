@@ -4,16 +4,16 @@
 Summary:	Internet Relay Chat Server
 Summary(pl):	Serwer IRC
 Name:		ircd-hybrid
-Version:	6.3.1
+Version:	7beta15
 Release:	1
 License:	GPL v1
 Group:		Daemons
-Source0:	http://prdownloads.sourceforge.net/ircd-hybrid/%{name}-%{version}.tgz
+Source0:	http://www.ircd-hybrid.org/.beta/oxpk99/%{name}-%{version}.tgz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-config.patch
-Patch1:		%{name}-ac25x.patch
-Patch2:		%{name}-ac_fixes.patch
+#Patch1:	%{name}-ac25x.patch
+#Patch2:	%{name}-ac_fixes.patch
 Patch3:		%{name}-change_uid.patch
 URL:		http://www.ircd-hybrid.org/
 BuildRequires:	autoconf
@@ -22,25 +22,27 @@ BuildRequires:	zlib-devel
 Prereq:		rc-scripts
 Prereq:		/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-Conflicts:	ircd
-Conflicts:	ircd6
+Obsoletes:	ircd
+Obsoletes:	ircd6
 
 %define		_sysconfdir	/etc/ircd
 %define		_localstatedir	/var/lib/ircd
 
 %description
 Ircd-hybrid is an advanced IRC server which is most commonly used on
-the EFNet IRC network. It is fast, reliable, and powerful.
+the EFNet IRC network. It is fast, reliable, and powerful. This
+version supports IPv6.
 
 %description -l pl
 Ircd-hybrid jest zaawansowanym serwerem IRC, najczê¶ciej u¿ywanym w
-sieci EFNet. Jest szybki, stabilny i wydajny.
+sieci EFNet. Jest szybki, stabilny i wydajny. Ta wersja obs³uguje
+IPv6.
 
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
+#%patch1 -p1
+#%patch2 -p1
 %patch3	-p1
 
 %build
@@ -49,29 +51,43 @@ cp -f %{_datadir}/automake/config.* autoconf
 aclocal
 %{__autoconf}
 CFLAGS="%{rpmcflags} %{?debug:-DDEBUGMODE}"
-%configure
+%configure	--enable-zlib \
+		--enable-ipv6 \
+		--enable-small-net \
+		--disable-ssl \
+		--with-nicklen=12 \
+		--with-maxclients=512
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_libdir}/ircd,%{_var}/log/ircd,%{_sysconfdir}} \
-	$RPM_BUILD_ROOT{%{_libdir}/ircd,%{_sbindir},%{_mandir}/man8} \
+	$RPM_BUILD_ROOT{%{_libdir}/ircd/{modules{,/autoload},tools,help},%{_sbindir},%{_mandir}/man8} \
 	$RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},%{_localstatedir}}
 
 install src/ircd $RPM_BUILD_ROOT%{_sbindir}/ircd
+install servlink/servlink $RPM_BUILD_ROOT%{_sbindir}/servlink
 install doc/simple.conf	$RPM_BUILD_ROOT%{_sysconfdir}/ircd.conf
 install doc/ircd.8 $RPM_BUILD_ROOT%{_mandir}/man8
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/ircd
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/ircd
 
+cd modules
+	install *.so $RPM_BUILD_ROOT%{_libdir}/ircd/modules/autoload
+	cd core
+		install *.so $RPM_BUILD_ROOT%{_libdir}/ircd/modules
+	cd ..
+cd ..
+
 cd tools
-	for i in fixklines mkpasswd viconf mkconf untabify; do
-		install $i $RPM_BUILD_ROOT%{_libdir}/ircd/$i
+	for i in convertconf convertilines convertklines encspeed mkkeypair mkpasswd untabify viconf; do
+		install $i $RPM_BUILD_ROOT%{_libdir}/ircd/tools/$i
 	done
 cd ..
 
-gzip -9nf doc/{*.txt,example.*,README*,simple.conf,Tao-of-IRC.940110} \
-	RELNOTES ChangeLog Hybrid-team opers.txt
+cd help
+	install opers/* users/* $RPM_BUILD_ROOT%{_libdir}/ircd/help
+cd ..
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -91,12 +107,12 @@ if [ -n "`id -u ircd 2>/dev/null`" ]; then
 		exit 1
 	fi
 else
-	%{_sbindir}/useradd -g ircd -d /etc/%{name} -u 75 -s /bin/true ircd 2> /dev/null
+	%{_sbindir}/useradd -g ircd -d /etc/ircd -u 75 -c "IRC service account" -s /bin/true ircd 2> /dev/null
 fi
 
 %post
 /sbin/chkconfig --add ircd
-if [ -f /var/lock/subsys/httpd ]; then
+if [ -f /var/lock/subsys/ircd ]; then
 	/etc/rc.d/init.d/ircd restart 1>&2
 else
 	echo "Run \"/etc/rc.d/init.d/ircd start\" to start IRC daemon."
@@ -120,14 +136,19 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc doc/*.gz
+%doc doc/{*.txt,*.conf} RELNOTES ChangeLog Hybrid-team opers.txt
 %attr(755,root,root) %{_sbindir}/*
 %attr(770,root,ircd) %dir %{_sysconfdir}
 %attr(660,ircd,ircd) %config(noreplace) %{_sysconfdir}/ircd.conf
 %attr(754,root,root) /etc/rc.d/init.d/ircd
 %attr(644,root,root) /etc/sysconfig/ircd
 %dir %{_libdir}/ircd
-%attr(755,root,root) %{_libdir}/ircd/*
+%dir %{_libdir}/ircd/modules
+%dir %{_libdir}/ircd/tools
+%dir %{_libdir}/ircd/help
+%attr(755,root,root) %{_libdir}/ircd/modules/*
+%attr(755,root,root) %{_libdir}/ircd/tools/*
+%{_libdir}/ircd/help/*
 %attr(770,root,ircd) %dir %{_var}/log/ircd
 %attr(770,root,ircd) %dir %{_localstatedir}
 %{_mandir}/man*/*
