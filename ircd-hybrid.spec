@@ -4,21 +4,24 @@
 #
 # Conditional build:
 # _with_ipv6		- enable ipv6 support - do not use for v4-only machines.
+# _with_longnicks	- enable long nicknames.  All servers on the network
+# 					  must use the same length.
+# _with_longtopics	- enable long topics.  All servers on the network
+# 					  must use the same length.
 #
 Summary:	Internet Relay Chat Server
 Summary(pl):	Serwer IRC
 Name:		ircd-hybrid
-Version:	7.0rc10
+Version:	7.0
 Release:	1
-License:	GPL v1
+Epoch:		1
+License:	GPL v2
 Group:		Daemons
-Source0:	http://www.ircd-hybrid.org/.beta/oxpk99/%{name}-%{version}.tgz
-# Source0-md5:	b5cabcace16cbacd61699c18db81f48f
+Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}.tgz
+# Source0-md5:	bee69c994c70fb29a711614150587cd4
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-config.patch
-#Patch1:	%{name}-ac25x.patch
-#Patch2:	%{name}-ac_fixes.patch
 Patch3:		%{name}-change_uid.patch
 Patch4:		%{name}-va.patch
 Patch5:		%{name}-opt.patch
@@ -56,8 +59,6 @@ IPv6.
 %prep
 %setup -q
 %patch0 -p1
-#%patch1 -p1
-#%patch2 -p1
 %patch3	-p1
 %patch4 -p1
 %patch5 -p1
@@ -72,8 +73,11 @@ CFLAGS="%{rpmcflags} %{?debug:-DDEBUGMODE}"
 		--enable-zlib \
 		%{?_with_ipv6:--enable-ipv6} \
 		--enable-small-net \
-		--disable-ssl \
-		--with-nicklen=12 \
+		%{?_with_longnicks:--with-nicklen=20} \
+		%{?_with_longtopics:--with-topiclen=500} \
+		%{?_with_ssl:--enable-openssl} \
+		%{!?_with_ssl:--disable-openssl} \
+		--enable-shared-modules \
 		--with-maxclients=512
 %{__make}
 
