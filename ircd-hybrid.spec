@@ -23,17 +23,18 @@ Prereq:		rc-scripts
 Prereq:		/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Conflicts:	ircd
+Conflicts:	ircd6
 
 %define		_sysconfdir	/etc/ircd
 %define		_localstatedir	/var/lib/ircd
 
 %description
-Ircd-hybrid is the server (daemon) program for the Internet Relay Chat
-Program. This version supports IPv6, too.
+Ircd-hybrid is an advanced IRC server which is most commonly used on
+the EFNet IRC network. It is fast, reliable, and powerful.
 
 %description -l pl
-Ircd-hybrid jest serwerem us³ugi IRC (Internet Relay Chat Program). Ta wersja
-wspiera tak¿e protokó³ IPv6.
+Ircd-hybrid jest zaawansowanym serwerem IRC, najczê¶ciej u¿ywanym w
+sieci EFNet. Jest szybki, stabilny i wydajny.
 
 %prep
 %setup -q
@@ -44,7 +45,7 @@ wspiera tak¿e protokó³ IPv6.
 
 %build
 mv -f autoconf/configure.in .
-cp -f /usr/share/automake/config.* autoconf
+cp -f %{_datadir}/automake/config.* autoconf
 aclocal
 autoconf
 CFLAGS="%{rpmcflags} %{?debug:-DDEBUGMODE}"
