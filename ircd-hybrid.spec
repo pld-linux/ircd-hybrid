@@ -28,13 +28,8 @@ BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	zlib-devel
 Prereq:		rc-scripts
-Requires(pre):	/usr/bin/getgid
-Requires(pre):	/bin/id
-Requires(pre):	/usr/sbin/groupadd
-Requires(pre):	/usr/sbin/useradd
+Requires(pre):	user-ircd
 Requires(post,preun):	/sbin/chkconfig
-Requires(postun):	/usr/sbin/userdel
-Requires(postun):	/usr/sbin/groupdel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	ircd
 Obsoletes:	ircd6
@@ -109,24 +104,6 @@ cd ..
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%pre
-if [ -n "`getgid ircd`" ]; then
-	if [ "`getgid ircd`" != "75" ]; then
-		echo "Error: group ircd doesn't have gid=75. Correct this before installing ircd." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/groupadd -f -g 75 ircd 2> /dev/null
-fi
-if [ -n "`id -u ircd 2>/dev/null`" ]; then
-	if [ "`id -u ircd`" != "75" ]; then
-		echo "Error: user ircd doesn't have uid=75. Correct this before installing ircd." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/useradd -g ircd -d /etc/ircd -u 75 -c "IRC service account" -s /bin/true ircd 2> /dev/null
-fi
-
 %post
 /sbin/chkconfig --add ircd
 if [ -f /var/lock/subsys/ircd ]; then
@@ -141,12 +118,6 @@ if [ "$1" = "0" ]; then
 		/etc/rc.d/init.d/ircd stop 1>&2
 	fi
 	/sbin/chkconfig --del ircd
-fi
-
-%postun
-if [ "$1" = "0" ]; then
-	/usr/sbin/userdel ircd 2> /dev/null
-	/usr/sbin/groupdel ircd 2> /dev/null
 fi
 
 %files
