@@ -10,7 +10,7 @@
 				#   must use the same length.
 %bcond_with	longtopics	# - enable long topics.  All servers on the network
 				#   must use the same length.
-
+#
 Summary:	Internet Relay Chat Server
 Summary(pl):	Serwer IRC
 Name:		ircd-hybrid
@@ -79,7 +79,7 @@ CFLAGS="%{rpmcflags} %{?debug:-DDEBUGMODE}"
 		%{?with_longnicks:--with-nicklen=20} \
 		%{?with_longtopics:--with-topiclen=500} \
 		%{?with_ssl:--enable-openssl} \
-		%{?without_ssl:--disable-openssl} \
+		%{!?with_ssl:--disable-openssl} \
 		--enable-shared-modules \
 		--with-maxclients=512
 %{__make}
