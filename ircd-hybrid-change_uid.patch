@@ -1,24 +1,24 @@
---- ircd-hybrid-6.3.1.orig/src/ircd.c	Wed Feb  6 05:56:12 2002
-+++ ircd-hybrid-6.3.1/src/ircd.c	Fri May  3 20:35:25 2002
-@@ -706,13 +706,23 @@
+--- ircd-hybrid-7beta15.orig/src/ircd.c	Wed May  8 04:54:02 2002
++++ ircd-hybrid-7beta15/src/ircd.c	Fri May 24 18:49:09 2002
+@@ -560,13 +560,22 @@
+ 
+ int main(int argc, char *argv[])
  {
-   time_t      delay = 0;
-   aConfItem*  aconf;
--  
+-  /* Check to see if the user is running us as root, which is a nono */
+   
 -  if(geteuid() == 0)
 -  {
--  	fprintf(stderr, "ERROR: Don't run ircd as root!\n");
--  	return -1;
+-    fprintf(stderr, "Don't run ircd as root!!!\n");
+-    return -1;
 -  }
- 
 +#ifndef IRC_UID
-+  	if(geteuid() == 0)
++	/* Check to see if the user is running us as root, which is a nono */
++	if(geteuid() == 0) 
 +	{
-+		fprintf(stderr, "ERROR: Don't run ircd as root!\n");	
-+		return -1;	
++		fprintf(stderr, "ERROR: Don't run ircd as root!\n");
++		return -1;
 +	}
 +#endif
-+
 +#if defined(IRC_UID) && defined(IRC_GID)
 +	if(geteuid() == 0)
 +	{
@@ -26,7 +26,6 @@
 +		setuid(IRC_UID);
 +	}
 +#endif
-+			  
+ 
    /*
     * save server boot time right away, so getrusage works correctly
-    */
