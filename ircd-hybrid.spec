@@ -15,7 +15,7 @@ Summary:	Internet Relay Chat Server
 Summary(pl):	Serwer IRC
 Name:		ircd-hybrid
 Version:	7.0.2
-Release:	2
+Release:	3
 Epoch:		1
 License:	GPL v2
 Group:		Daemons
