@@ -64,7 +64,7 @@ IPv6.
 %build
 mv -f autoconf/configure.in .
 cp -f %{_datadir}/automake/config.* autoconf
-aclocal
+%{__aclocal}
 %{__autoconf}
 CFLAGS="%{rpmcflags} %{?debug:-DDEBUGMODE}"
 %configure \
