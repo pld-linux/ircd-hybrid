@@ -13,6 +13,7 @@ Release:	1
 License:	GPL v1
 Group:		Daemons
 Source0:	http://www.ircd-hybrid.org/.beta/oxpk99/%{name}-%{version}.tgz
+# Source0-md5:	1fc28c00e981fbe597c941fba2ef5d60
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-config.patch
