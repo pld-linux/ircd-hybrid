@@ -47,7 +47,7 @@ sieci EFNet. Jest szybki, stabilny i wydajny.
 mv -f autoconf/configure.in .
 cp -f %{_datadir}/automake/config.* autoconf
 aclocal
-autoconf
+%{__autoconf}
 CFLAGS="%{rpmcflags} %{?debug:-DDEBUGMODE}"
 %configure
 %{__make}
