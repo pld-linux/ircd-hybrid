@@ -1,14 +1,23 @@
+# TODO:
+# - add modyfications for use system avalaible shared adns library.
+#
 Summary:	Internet Relay Chat Server
+Summary(pl):	
 Name:		ircd-hybrid
 Version:	6.3.1
 Release:	1
-License:	GPL
+License:	GPL v1
 Group:		Daemons
-Source0:	%{name}-%{version}.tgz
+Source0:	http://prdownloads.sourceforge.net/ircd-hybrid/%{name}-%{version}.tgz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-config.patch
+Patch1:		%{name}-ac25x.patch
+Patch2:		%{name}-ac_fixes.patch
 URL:		http://www.ircd-hybrid.org/
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	zlib-devel
 Prereq:		rc-scripts
 Prereq:		/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -18,34 +27,37 @@ Conflicts:	ircd
 %define		_localstatedir	/var/lib/ircd
 
 %description
-Ircd is the server (daemon) program for the Internet Relay Chat
+Ircd-hybrid is the server (daemon) program for the Internet Relay Chat
 Program. This version supports IPv6, too.
 
 %description -l pl
-Ircd jest serwerem us³ugi IRC (Internet Relay Chat Program). Ta wersja
+Ircd-hybrid jest serwerem us³ugi IRC (Internet Relay Chat Program). Ta wersja
 wspiera tak¿e protokó³ IPv6.
 
 %prep
 %setup -q
-%patch -p1
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 %build
-
-%configure2_13
+mv -f autoconf/configure.in .
+cp -f /usr/share/automake/config.* autoconf
+aclocal
+autoconf
+CFLAGS="%{rpmcflags} %{?debug:-DDEBUGMODE}"
+%configure
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT{%{_libdir}/ircd,%{_var}/log/ircd,%{_sysconfdir}} \
+	$RPM_BUILD_ROOT{%{_libdir}/ircd,%{_sbindir},%{_mandir}/man8} \
+	$RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},%{_localstatedir}}
 
-install -d $RPM_BUILD_ROOT%{_var}/log/ircd
-install -d $RPM_BUILD_ROOT%{_libdir}/ircd
-install -d $RPM_BUILD_ROOT%{_sbindir}
-install -d $RPM_BUILD_ROOT%{_mandir}/man8
-install -d $RPM_BUILD_ROOT{%{_sysconfdir},/etc/rc.d/init.d,/etc/sysconfig}
-install -d $RPM_BUILD_ROOT%{_localstatedir}
-install -d $RPM_BUILD_ROOT%{_libdir}/ircd
 install src/ircd $RPM_BUILD_ROOT%{_sbindir}/ircd
 install doc/simple.conf	$RPM_BUILD_ROOT%{_sysconfdir}/ircd.conf
+install doc/ircd.8 $RPM_BUILD_ROOT%{_mandir}/man8
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/ircd
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/ircd
 
@@ -55,10 +67,8 @@ cd tools
 	done
 cd ..
 
-for i in doc/*; do
-	if [ -f $i ]; then gzip -9nf $i; fi
-done
-install doc/ircd.8.gz $RPM_BUILD_ROOT%{_mandir}/man8/ircd.8.gz
+gzip -9nf doc/{*.txt,example.*,README*,simple.conf,Tao-of-IRC.940110} \
+	RELNOTES ChangeLog Hybrid-team opers.txt
 
 %clean
 rm -rf $RPM_BUILD_ROOT
