@@ -37,7 +37,6 @@ case "$1" in
 		touch /var/lock/subsys/ircd
 	else
 		msg_already_running "IRCd Server"
-		exit 1
 	fi
 	;;
   stop)
@@ -46,23 +45,23 @@ case "$1" in
 		# Stop daemons.
 		msg_stopping "IRCd Server"
 		killproc ircd
-		rm -f /var/run/ircd.pid
-		rm -f /var/lock/subsys/ircd
+		rm -f /var/run/ircd.pid /var/lock/subsys/ircd >/dev/null 2>&1
 	else
 		msg_already_running "IRCd Server"
-		exit 1
 	fi
 	;;
-  restart|reload)
+  restart|force-reload)
   	$0 stop
 	$0 start
+	exit $?
 	;;
   status)
   	status ircd
+	exit $?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|reload|status}"
-	exit 1
+	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	exit 3
 esac
 
 exit 0
