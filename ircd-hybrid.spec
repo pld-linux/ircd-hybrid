@@ -14,6 +14,7 @@ Source2:	%{name}.sysconfig
 Patch0:		%{name}-config.patch
 Patch1:		%{name}-ac25x.patch
 Patch2:		%{name}-ac_fixes.patch
+Patch3:		%{name}-change_uid.patch
 URL:		http://www.ircd-hybrid.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -39,6 +40,7 @@ wspiera tak¿e protokó³ IPv6.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3	-p1
 
 %build
 mv -f autoconf/configure.in .
