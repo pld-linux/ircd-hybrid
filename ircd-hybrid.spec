@@ -14,7 +14,7 @@ Summary:	Internet Relay Chat Server
 Summary(pl):	Serwer IRC
 Name:		ircd-hybrid
 Version:	7.0
-Release:	3.1
+Release:	3.2
 Epoch:		1
 License:	GPL v2
 Group:		Daemons
@@ -22,6 +22,7 @@ Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}.tgz
 # Source0-md5:	bee69c994c70fb29a711614150587cd4
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
+Source3:	%{name}.conf
 Patch0:		%{name}-config.patch
 Patch1:		%{name}-change_uid.patch
 Patch2:		%{name}-opt.patch
@@ -88,10 +89,10 @@ install -d $RPM_BUILD_ROOT{%{_libdir}/ircd,%{_var}/log/ircd,%{_sysconfdir}} \
 
 install src/ircd $RPM_BUILD_ROOT%{_sbindir}/ircd
 install servlink/servlink $RPM_BUILD_ROOT%{_sbindir}/servlink
-install doc/simple.conf	$RPM_BUILD_ROOT%{_sysconfdir}/ircd.conf
 install doc/ircd.8 $RPM_BUILD_ROOT%{_mandir}/man8
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/ircd
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/ircd
+install %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/ircd.conf
 
 cd modules
 	install *.so $RPM_BUILD_ROOT%{_libdir}/ircd/modules/autoload
@@ -171,3 +172,4 @@ fi
 %attr(770,root,ircd) %dir %{_var}/log/ircd
 %attr(770,root,ircd) %dir %{_localstatedir}
 %{_mandir}/man*/*
+%attr(770,ircd,ircd) %dir /var/run/ircd
