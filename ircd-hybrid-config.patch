@@ -1,0 +1,76 @@
+--- ircd-hybrid-6.3.1.orig/include/config.h	Sun Feb 17 06:58:09 2002
++++ ircd-hybrid-6.3.1/include/config.h	Thu May  2 16:51:02 2002
+@@ -68,7 +68,7 @@
+  *       will be preallocated for the entire whowas array when ircd is started.
+  *       You will want to crank this down if you are on a small net.
+  */
+-#define NICKNAMEHISTORYLENGTH 15000
++#define NICKNAMEHISTORYLENGTH 1000
+ 
+ /* Don't change this... */
+ #define HARD_FDLIMIT    (HARD_FDLIMIT_ - 10)
+@@ -100,16 +100,16 @@
+  *
+  */
+ 
+-#define DPATH   "/usr/local/ircd/"
+-#define SPATH   "/usr/local/ircd/ircd"
+-#define CPATH   "ircd.conf"
+-#define KPATH   "kline.conf"
+-#define DLPATH  "kline.conf"
+-#define MPATH   "ircd.motd"
+-#define LPATH   "ircd.log"
+-#define PPATH   "ircd.pid"
+-#define HPATH   "opers.txt"
+-#define OPATH   "opers.motd"
++#define DPATH   "/usr/"
++#define SPATH   "/usr/sbin/ircd"
++#define CPATH   "/etc/ircd/ircd.conf"
++#define KPATH   "/etc/ircd/kline.conf"
++#define DLPATH  "/etc/ircd/kline.conf"
++#define MPATH   "/etc/ircd/ircd.motd"
++#define LPATH   "/var/log/ircd/ircd.log"
++#define PPATH   "/var/lib/ircd/ircd.pid"
++#define HPATH   "/etc/ircd/opers.txt"
++#define OPATH   "/etc/ircd/opers.motd"
+ 
+ /* HIDE_OPS
+  * Define this to prevent non chanops from seeing what ops a channel has
+@@ -208,8 +208,8 @@
+  *
+  * These need to be defined if you want to use SYSLOG logging, too.
+  */
+-#define FNAME_USERLOG "/usr/local/ircd/users"
+-#define FNAME_OPERLOG "/usr/local/ircd/opers"
++#define FNAME_USERLOG "/var/log/ircd/users"
++#define FNAME_OPERLOG "/var/log/ircd/opers"
+ 
+ /* RFC1035_ANAL
+  * Defining this causes ircd to reject hostnames with non-compliant chars.
+@@ -533,7 +533,7 @@
+ /* MAXSENDQLENGTH - Max amount of internal send buffering
+  * Max amount of internal send buffering when socket is stuck (bytes)
+  */
+-#define MAXSENDQLENGTH 9000000    /* Recommended value: 9000000 for EFnet */
++#define MAXSENDQLENGTH 500000	/* Recommended value: 9000000 for EFnet */
+ 
+ /*  BUFFERPOOL - the maximum size of the total of all sendq's.
+  *  Recommended value is 4 times MAXSENDQLENGTH.
+@@ -570,7 +570,7 @@
+  * When this is defined, users will not be allowed to create new channels
+  * while the server is split, however they can join existing channel.
+  */
+-#undef  NO_CREATE_ON_SPLIT
++#define  NO_CREATE_ON_SPLIT
+ 
+ /*
+  * SPLIT_SMALLNET_SIZE defines what constitutes a split from
+@@ -756,7 +756,7 @@
+ 
+ /* INITIAL_DBUFS - how many dbufs to preallocate
+  */
+-#define INITIAL_DBUFS 4000 /* preallocate 16 megs of dbufs */
++#define INITIAL_DBUFS 300 /* preallocate 16 megs of dbufs */
+ 
+ /* MAXBUFFERS - increase socket buffers
+  *
