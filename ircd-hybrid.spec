@@ -4,17 +4,18 @@
 # - check alpha patch, it compiles but doesnt work ;/
 #
 # Conditional build:
-# _with_ipv6		- enable ipv6 support - do not use for v4-only machines.
-# _with_longnicks	- enable long nicknames.  All servers on the network
-# 					  must use the same length.
-# _with_longtopics	- enable long topics.  All servers on the network
-# 					  must use the same length.
-#
+%bcond_without	ipv6		# - enable ipv6 support - do not use for v4-only machines.
+%bcond_without	ssl		# - enable use ssl
+%bcond_with	longnicks	# - enable long nicknames.  All servers on the network
+				#   must use the same length.
+%bcond_with	longtopics	# - enable long topics.  All servers on the network
+				#   must use the same length.
+
 Summary:	Internet Relay Chat Server
 Summary(pl):	Serwer IRC
 Name:		ircd-hybrid
 Version:	7.0
-Release:	5
+Release:	6
 Epoch:		1
 License:	GPL v2
 Group:		Daemons
@@ -31,6 +32,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	flex
+BuildRequires:	gettext-devel
 BuildRequires:	zlib-devel
 Prereq:		rc-scripts
 Requires(pre):	/usr/bin/getgid
@@ -66,17 +68,18 @@ IPv6.
 %build
 mv -f autoconf/{configure.in,acconfig.h} .
 cp -f %{_datadir}/automake/config.* autoconf
+%{__gettextize}
 %{__aclocal}
 %{__autoconf}
 CFLAGS="%{rpmcflags} %{?debug:-DDEBUGMODE}"
 %configure \
 		--enable-zlib \
-		%{?_with_ipv6:--enable-ipv6} \
+		%{?with_ipv6:--enable-ipv6} \
 		--enable-small-net \
-		%{?_with_longnicks:--with-nicklen=20} \
-		%{?_with_longtopics:--with-topiclen=500} \
-		%{?_with_ssl:--enable-openssl} \
-		%{!?_with_ssl:--disable-openssl} \
+		%{?with_longnicks:--with-nicklen=20} \
+		%{?with_longtopics:--with-topiclen=500} \
+		%{?with_ssl:--enable-openssl} \
+		%{?without_ssl:--disable-openssl} \
 		--enable-shared-modules \
 		--with-maxclients=512
 %{__make}
@@ -93,6 +96,7 @@ install doc/ircd.8 $RPM_BUILD_ROOT%{_mandir}/man8
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/ircd
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/ircd
 install %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/ircd.conf
+touch $RPM_BUILD_ROOT{%{_sysconfdir}/{{dline,kline}.conf,{ircd,opers}.motd},%{_var}/log/ircd/{foper,oper,user}.log}
 
 cd modules
 	install *.so $RPM_BUILD_ROOT%{_libdir}/ircd/modules/autoload
@@ -159,7 +163,11 @@ fi
 %doc doc/{*.txt,*.conf,server-version-info,technical} RELNOTES ChangeLog Hybrid-team BUGS TODO
 %attr(755,root,root) %{_sbindir}/*
 %attr(770,root,ircd) %dir %{_sysconfdir}
-%attr(660,ircd,ircd) %config(noreplace) %{_sysconfdir}/ircd.conf
+%attr(660,ircd,ircd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/ircd.conf
+%attr(660,ircd,ircd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/dline.conf
+%attr(660,ircd,ircd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/kline.conf
+%attr(660,ircd,ircd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/ircd.motd
+%attr(660,ircd,ircd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/opers.motd
 %attr(754,root,root) /etc/rc.d/init.d/ircd
 %attr(644,root,root) /etc/sysconfig/ircd
 %dir %{_libdir}/ircd
@@ -170,6 +178,7 @@ fi
 %attr(755,root,root) %{_libdir}/ircd/tools/*
 %{_libdir}/ircd/help/*
 %attr(770,root,ircd) %dir %{_var}/log/ircd
+%attr(700,ircd,ircd) %ghost %{_var}/log/ircd/*
 %attr(770,root,ircd) %dir %{_localstatedir}
 %{_mandir}/man*/*
 %attr(770,ircd,ircd) %dir /var/run/ircd
