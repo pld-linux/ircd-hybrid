@@ -4,8 +4,8 @@
 # - check alpha patch, it compiles but doesnt work ;/
 #
 # Conditional build:
-%bcond_without	ipv6		# - enable ipv6 support - do not use for v4-only machines.
-%bcond_without	ssl		# - enable use ssl
+%bcond_with	ipv6		# - enable ipv6 support - do not use for v4-only machines.
+%bcond_with	ssl		# - enable use ssl
 %bcond_with	longnicks	# - enable long nicknames.  All servers on the network
 				#   must use the same length.
 %bcond_with	longtopics	# - enable long topics.  All servers on the network
