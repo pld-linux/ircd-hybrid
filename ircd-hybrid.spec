@@ -127,7 +127,7 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/ircd
 %attr(644,root,root) /etc/sysconfig/ircd
 %dir %{_libdir}/ircd
-%attr(755,root,root) %{_libdir}/ircd/
+%attr(755,root,root) %{_libdir}/ircd/*
 %attr(770,root,ircd) %dir %{_var}/log/ircd
 %attr(770,root,ircd) %dir %{_localstatedir}
 %{_mandir}/man*/*
