@@ -14,13 +14,13 @@
 Summary:	Internet Relay Chat Server
 Summary(pl):	Serwer IRC
 Name:		ircd-hybrid
-Version:	7.0
-Release:	6
+Version:	7.0.2
+Release:	1
 Epoch:		1
 License:	GPL v2
 Group:		Daemons
 Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}.tgz
-# Source0-md5:	bee69c994c70fb29a711614150587cd4
+# Source0-md5:	e21a3bfac97d75701c04b9ca33b06453
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.conf
