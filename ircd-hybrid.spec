@@ -2,7 +2,7 @@
 # - add modyfications for use system avalaible shared adns library.
 #
 Summary:	Internet Relay Chat Server
-Summary(pl):	
+Summary(pl):	Serwer IRC
 Name:		ircd-hybrid
 Version:	6.3.1
 Release:	1
