@@ -1,5 +1,5 @@
---- ircd-hybrid-7beta15.orig/include/config.h	Wed Apr  3 15:10:29 2002
-+++ ircd-hybrid-7beta15/include/config.h	Sun May 26 11:24:28 2002
+--- ircd-hybrid-7.0/include/config.h	2003-12-14 02:18:47.000000000 +0100
++++ ircd-hybrid-7.0/include/config.h	2003-12-14 02:29:01.000000000 +0100
 @@ -27,6 +27,8 @@
  
  #include "setup.h"
@@ -9,7 +9,24 @@
  
  /*
   * IRCD-HYBRID-7 COMPILE TIME CONFIGURATION OPTIONS
-@@ -132,15 +134,15 @@
+@@ -92,6 +94,7 @@
+ #define BINPATH         "IRCD$BINDIR:"
+ #define ETCPATH         "IRCD$CONFDIR:"
+ #define LOGPATH         "IRCD$LOGDIR:"
++#define RUNPATH		"IRCD$RUNDIR:"
+ 
+ #undef  MODPATH
+ #undef  AUTOMODPATH
+@@ -106,7 +109,7 @@
+ #define RPATH   ETCPATH "IRCD.RSA"              /* RSA private key file */
+ #define MPATH   ETCPATH "IRCD.MOTD"             /* MOTD filename */
+ #define LPATH   LOGPATH "IRCD.LOG"              /* logfile */
+-#define PPATH   ETCPATH "IRCD.PID"              /* pid file */
++#define PPATH   RUNPATH "IRCD.PID"              /* pid file */
+ #define HPATH   ETCPATH "OPERS.TXT"             /* oper help file */
+ #define UHPATH  ETCPATH "USERS.TXT"             /* user help file */
+ #define OPATH   ETCPATH "OPERS.MOTD"            /* oper MOTD file */
+@@ -132,15 +135,16 @@
   */
  
  /* dirs */
@@ -29,12 +46,22 @@
 +#define MSGPATH		"/usr/share/locale"
 +#define ETCPATH		"/etc/ircd"
 +#define LOGPATH		"/var/log/ircd"
-+#define HPATH		"/usr/lib/ircd/help"
-+#define UHPATH		HPATH
++#define HPATH		"/usr/lib/ircd/help/opers"
++#define UHPATH	        "/usr/lib/ircd/help/users"
++#define RUNPATH		"/var/run/ircd"
  
  /* files */
  #define SPATH   BINPATH "/ircd"                 /* ircd executable */
-@@ -160,7 +162,7 @@
+@@ -152,7 +156,7 @@
+ #define RPATH   ETCPATH "/ircd.rsa"             /* ircd rsa private keyfile */
+ #define MPATH   ETCPATH "/ircd.motd"            /* MOTD file */
+ #define LPATH   LOGPATH "/ircd.log"             /* ircd logfile */
+-#define PPATH   ETCPATH "/ircd.pid"             /* pid file */
++#define PPATH   RUNPATH "/ircd.pid"             /* pid file */
+ #define OPATH   ETCPATH "/opers.motd"           /* oper MOTD file */
+ #define LIPATH  ETCPATH "/links.txt"            /* cached links file */
+ #endif /* !VMS */
+@@ -160,7 +164,7 @@
  /* WANT_GETTEXT - toggle gettext support.
   * NOTE: if configure doesn't detect gettext, this won't do anything.
   */
