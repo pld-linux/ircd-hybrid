@@ -1,0 +1,11 @@
+--- ircd-hybrid-7.0/src/send.c~	2003-11-26 14:05:06.000000000 +0100
++++ ircd-hybrid-7.0/src/send.c	2003-11-26 14:05:27.000000000 +0100
+@@ -1206,7 +1206,7 @@
+     if(client_p->umodes & flags)
+     {
+       linebuf_newbuf(&linebuf);
+-      linebuf_putmsg(&linebuf, NULL, dummy,
++      linebuf_putmsg(&linebuf, NULL, NULL,
+                      ":%s NOTICE %s :*** Notice -- %s", me.name,
+                      client_p->name, nbuf);
+ 
