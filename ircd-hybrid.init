@@ -29,7 +29,7 @@ case "$1" in
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/ircd ]; then
 		msg_starting "IRCd Server"
-		daemon ircd -c
+		daemon ircd
 	else
 		msg_already_running IRCd
 		exit 1
