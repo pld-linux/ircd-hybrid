@@ -33,20 +33,23 @@ BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	gettext-devel
+BuildRequires:	rpmbuild(macros) >= 1.159
 BuildRequires:	zlib-devel
 Prereq:		rc-scripts
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires(post,preun):	/sbin/chkconfig
-BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+Provides:	group(ircd)
+Provides:	user(ircd)
+Obsoletes:	bircd
 Obsoletes:	ircd
 Obsoletes:	ircd6
 Obsoletes:	ircd-ptlink
-Obsoletes:	bircd
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/ircd
 %define		_localstatedir	/var/lib/ircd
@@ -156,8 +159,8 @@ fi
 
 %postun
 if [ "$1" = "0" ]; then
-	/usr/sbin/userdel ircd 2> /dev/null
-	/usr/sbin/groupdel ircd 2> /dev/null
+	%userremove ircd
+	%groupremove ircd
 fi
 
 %files
