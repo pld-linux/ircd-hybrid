@@ -9,7 +9,7 @@ Summary:	Internet Relay Chat Server
 Summary(pl):	Serwer IRC
 Name:		ircd-hybrid
 Version:	7beta15
-Release:	1
+Release:	2
 License:	GPL v1
 Group:		Daemons
 Source0:	http://www.ircd-hybrid.org/.beta/oxpk99/%{name}-%{version}.tgz
@@ -26,7 +26,13 @@ BuildRequires:	zlib-devel
 BuildRequires:	byacc
 BuildRequires:	flex
 Prereq:		rc-scripts
-Prereq:		/sbin/chkconfig
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/bin/id
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun);	/usr/sbin/userdel
+Requires(postun):	/usr/sbin/groupdel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	ircd
 Obsoletes:	ircd6
@@ -102,19 +108,19 @@ rm -rf $RPM_BUILD_ROOT
 %pre
 if [ -n "`getgid ircd`" ]; then
 	if [ "`getgid ircd`" != "75" ]; then
-		echo "Warning: group ircd haven't gid=75. Correct this before installing ircd" 1>&2
+		echo "Error: group ircd doesn't have gid=75. Correct this before installing ircd." 1>&2
 		exit 1
 	fi
 else
-	%{_sbindir}/groupadd -f -g 75 ircd 2> /dev/null
+	/usr/sbin/groupadd -f -g 75 ircd 2> /dev/null
 fi
 if [ -n "`id -u ircd 2>/dev/null`" ]; then
 	if [ "`id -u ircd`" != "75" ]; then
-		echo "Warning: user ircd haven't uid=75. Correct this before installing ircd" 1>&2
+		echo "Error: user ircd doesn't have uid=75. Correct this before installing ircd." 1>&2
 		exit 1
 	fi
 else
-	%{_sbindir}/useradd -g ircd -d /etc/ircd -u 75 -c "IRC service account" -s /bin/true ircd 2> /dev/null
+	/usr/sbin/useradd -g ircd -d /etc/ircd -u 75 -c "IRC service account" -s /bin/true ircd 2> /dev/null
 fi
 
 %post
@@ -126,7 +132,6 @@ else
 fi
 
 %preun
-# If package is being erased for the last time.
 if [ "$1" = "0" ]; then
 	if [ -f /var/lock/subsys/ircd ]; then
 		/etc/rc.d/init.d/ircd stop 1>&2
@@ -135,10 +140,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %postun
-# If package is being erased for the last time.
 if [ "$1" = "0" ]; then
-	%{_sbindir}/userdel ircd 2> /dev/null
-	%{_sbindir}/groupdel ircd 2> /dev/null
+	/usr/sbin/userdel ircd 2> /dev/null
+	/usr/sbin/groupdel ircd 2> /dev/null
 fi
 
 %files
