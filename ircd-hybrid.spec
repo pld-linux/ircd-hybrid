@@ -3,7 +3,7 @@
 # - rewrite ipv6 support to work with non-v6 systems
 #
 # Conditional build:
-# _without_ipv6		- disable ipv6 support - need for v4-only machines. 
+# _with_ipv6		- enable ipv6 support - do not use for v4-only machines. 
 #
 Summary:	Internet Relay Chat Server
 Summary(pl):	Serwer IRC
@@ -57,7 +57,7 @@ aclocal
 CFLAGS="%{rpmcflags} %{?debug:-DDEBUGMODE}"
 %configure \
 		--enable-zlib \
-		%{!?_without_ipv6:--enable-ipv6} \
+		%{?_with_ipv6:--enable-ipv6} \
 		--enable-small-net \
 		--disable-ssl \
 		--with-nicklen=12 \
