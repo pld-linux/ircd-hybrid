@@ -1,0 +1,9 @@
+- added BuildRequires rules,
+- added ac25x and ac_fixes patches which allow now regenerate ac files
+  before start building package (now %{rpmcflags} are correctly passed to
+  compilations flags),
+- added Source url,
+- License changed to GPL v1,
+- some simpilfications and minor changes in %install.
+TODO:
+- add modyfications for use system avalaible shared adns library.
