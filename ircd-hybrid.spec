@@ -1,7 +1,6 @@
 # TODO:
-# - add modyfications for use system avalaible shared adns library.
+# - modify to use system available shared adns library.
 # - rewrite ipv6 support to work with non-v6 systems
-# - check alpha patch, it compiles but doesnt work ;/
 #
 # Conditional build:
 %bcond_with	ipv6		# - enable ipv6 support - do not use for v4-only machines.
