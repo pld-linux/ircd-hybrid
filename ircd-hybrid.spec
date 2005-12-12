@@ -18,7 +18,7 @@ Release:	3
 Epoch:		1
 License:	GPL v2
 Group:		Daemons
-Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}.tgz
+Source0:	http://dl.sourceforge.net/ircd-hybrid/%{name}-%{version}.tgz
 # Source0-md5:	5e5d93dbd55e6865d75ee18a2b56170f
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
@@ -34,14 +34,14 @@ BuildRequires:	flex
 BuildRequires:	gettext-devel
 BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	zlib-devel
-Prereq:		rc-scripts
-Requires(pre):	/usr/bin/getgid
-Requires(pre):	/bin/id
-Requires(pre):	/usr/sbin/groupadd
-Requires(pre):	/usr/sbin/useradd
+Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
-Requires(post,preun):	/sbin/chkconfig
+Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires:	rc-scripts
 Provides:	group(ircd)
 Provides:	user(ircd)
 Obsoletes:	bircd
@@ -153,13 +153,13 @@ fi
 %doc doc/{*.txt,*.conf,server-version-info,technical} RELNOTES ChangeLog Hybrid-team BUGS TODO
 %attr(755,root,root) %{_sbindir}/*
 %attr(770,root,ircd) %dir %{_sysconfdir}
-%attr(660,ircd,ircd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/ircd.conf
-%attr(660,ircd,ircd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/dline.conf
-%attr(660,ircd,ircd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/kline.conf
-%attr(660,ircd,ircd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/ircd.motd
-%attr(660,ircd,ircd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/opers.motd
+%attr(660,ircd,ircd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ircd.conf
+%attr(660,ircd,ircd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/dline.conf
+%attr(660,ircd,ircd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/kline.conf
+%attr(660,ircd,ircd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ircd.motd
+%attr(660,ircd,ircd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/opers.motd
 %attr(754,root,root) /etc/rc.d/init.d/ircd
-%attr(644,root,root) /etc/sysconfig/ircd
+%attr(644,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/ircd
 %dir %{_libdir}/ircd
 %dir %{_libdir}/ircd/modules
 %dir %{_libdir}/ircd/tools
