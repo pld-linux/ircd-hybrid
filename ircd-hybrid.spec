@@ -5,10 +5,8 @@
 # Conditional build:
 %bcond_with	ipv6		# - enable ipv6 support - do not use for v4-only machines.
 %bcond_with	ssl		# - enable use ssl
-%bcond_with	longnicks	# - enable long nicknames.  All servers on the network
-				#   must use the same length.
-%bcond_with	longtopics	# - enable long topics.  All servers on the network
-				#   must use the same length.
+%bcond_with	longnicks	# - enable long nicknames.  All servers on the network must use the same length.
+%bcond_with	longtopics	# - enable long topics.  All servers on the network must use the same length.
 #
 Summary:	Internet Relay Chat Server
 Summary(pl):	Serwer IRC
@@ -32,7 +30,7 @@ BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	gettext-devel
-BuildRequires:	rpmbuild(macros) >= 1.202
+BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -46,8 +44,8 @@ Provides:	group(ircd)
 Provides:	user(ircd)
 Obsoletes:	bircd
 Obsoletes:	ircd
-Obsoletes:	ircd6
 Obsoletes:	ircd-ptlink
+Obsoletes:	ircd6
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/ircd
@@ -77,15 +75,15 @@ cp -f %{_datadir}/automake/config.* autoconf
 %{__autoconf}
 CFLAGS="%{rpmcflags} %{?debug:-DDEBUGMODE}"
 %configure \
-		--enable-zlib \
-		%{?with_ipv6:--enable-ipv6} \
-		--enable-small-net \
-		%{?with_longnicks:--with-nicklen=20} \
-		%{?with_longtopics:--with-topiclen=500} \
-		%{?with_ssl:--enable-openssl} \
-		%{!?with_ssl:--disable-openssl} \
-		--enable-shared-modules \
-		--with-maxclients=512
+	--enable-zlib \
+	%{?with_ipv6:--enable-ipv6} \
+	--enable-small-net \
+	%{?with_longnicks:--with-nicklen=20} \
+	%{?with_longtopics:--with-topiclen=500} \
+	%{?with_ssl:--enable-openssl} \
+	%{!?with_ssl:--disable-openssl} \
+	--enable-shared-modules \
+	--with-maxclients=512
 %{__make}
 
 %install
@@ -128,17 +126,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add ircd
-if [ -f /var/lock/subsys/ircd ]; then
-	/etc/rc.d/init.d/ircd restart 1>&2
-else
-	echo "Run \"/etc/rc.d/init.d/ircd start\" to start IRC daemon."
-fi
+%service ircd restart "IRC daemon"
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/ircd ]; then
-		/etc/rc.d/init.d/ircd stop 1>&2
-	fi
+	%service ircd stop
 	/sbin/chkconfig --del ircd
 fi
 
