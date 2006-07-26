@@ -151,7 +151,7 @@ fi
 %attr(660,ircd,ircd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ircd.motd
 %attr(660,ircd,ircd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/opers.motd
 %attr(754,root,root) /etc/rc.d/init.d/ircd
-%attr(644,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/ircd
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/ircd
 %dir %{_libdir}/ircd
 %dir %{_libdir}/ircd/modules
 %dir %{_libdir}/ircd/tools
