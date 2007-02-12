@@ -9,7 +9,7 @@
 %bcond_with	longtopics	# - enable long topics.  All servers on the network must use the same length.
 #
 Summary:	Internet Relay Chat Server
-Summary(pl):	Serwer IRC
+Summary(pl.UTF-8):   Serwer IRC
 Name:		ircd-hybrid
 Version:	7.0.3
 Release:	5
@@ -56,9 +56,9 @@ Ircd-hybrid is an advanced IRC server which is most commonly used on
 the EFNet IRC network. It is fast, reliable, and powerful. This
 version supports IPv6.
 
-%description -l pl
-Ircd-hybrid jest zaawansowanym serwerem IRC, najczê¶ciej u¿ywanym w
-sieci EFNet. Jest szybki, stabilny i wydajny. Ta wersja obs³uguje
+%description -l pl.UTF-8
+Ircd-hybrid jest zaawansowanym serwerem IRC, najczÄ™Å›ciej uÅ¼ywanym w
+sieci EFNet. Jest szybki, stabilny i wydajny. Ta wersja obsÅ‚uguje
 IPv6.
 
 %prep
