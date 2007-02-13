@@ -9,7 +9,7 @@
 %bcond_with	longtopics	# - enable long topics.  All servers on the network must use the same length.
 #
 Summary:	Internet Relay Chat Server
-Summary(pl.UTF-8):   Serwer IRC
+Summary(pl.UTF-8):	Serwer IRC
 Name:		ircd-hybrid
 Version:	7.0.3
 Release:	5
