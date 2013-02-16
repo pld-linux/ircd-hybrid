@@ -16,7 +16,7 @@ Release:	5
 Epoch:		1
 License:	GPL v2
 Group:		Daemons
-Source0:	http://dl.sourceforge.net/ircd-hybrid/%{name}-%{version}.tgz
+Source0:	http://downloads.sourceforge.net/ircd-hybrid/%{name}-%{version}.tgz
 # Source0-md5:	5e5d93dbd55e6865d75ee18a2b56170f
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
@@ -24,6 +24,7 @@ Source3:	%{name}.conf
 Patch0:		%{name}-config.patch
 Patch1:		%{name}-change_uid.patch
 Patch2:		%{name}-opt.patch
+Patch3:		%{name}-open-3-args.patch
 URL:		http://www.ircd-hybrid.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -66,6 +67,7 @@ IPv6.
 %patch0 -p1
 %patch1	-p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 mv -f autoconf/{configure.in,acconfig.h} .

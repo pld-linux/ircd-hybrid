@@ -1,0 +1,20 @@
+diff -ur ircd-hybrid-7.0.3-o/src/md5.c ircd-hybrid-7.0.3/src/md5.c
+--- ircd-hybrid-7.0.3-o/src/md5.c	2002-11-24 01:27:15.000000000 -0700
++++ ircd-hybrid-7.0.3/src/md5.c	2013-02-16 15:48:03.000000000 -0700
+@@ -157,14 +157,10 @@
+   int fd;
+ 
+ #ifdef	RPATH
+-  fd = open(RPATH, O_WRONLY|O_CREAT|O_TRUNC);
++  fd = open(RPATH, O_WRONLY|O_CREAT|O_TRUNC, 0600);
+   if (fd > 0)
+     {
+       write(fd, seed_char, 16);
+-/* by default on VMS, files can only be read by their owner */
+-#ifndef VMS
+-      fchmod(fd, 0600);
+-#endif
+       close(fd);
+     }
+ #endif
+Only in ircd-hybrid-7.0.3/src: md5.c~
