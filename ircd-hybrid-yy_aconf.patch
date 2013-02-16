@@ -1,0 +1,14 @@
+Only in ircd-hybrid-7.0.3/include: s_conf.h~
+diff -ur ircd-hybrid-7.0.3-o/src/ircd_parser.y ircd-hybrid-7.0.3/src/ircd_parser.y
+--- ircd-hybrid-7.0.3-o/src/ircd_parser.y	2003-10-25 20:08:23.000000000 -0600
++++ ircd-hybrid-7.0.3/src/ircd_parser.y	2013-02-16 15:54:52.000000000 -0700
+@@ -58,7 +58,7 @@
+ int yyparse();
+ 
+ static struct ConfItem *yy_achead = NULL;
+-static struct ConfItem *yy_aconf = NULL;
++struct ConfItem *yy_aconf = NULL;
+ static struct ConfItem *yy_aprev = NULL;
+ static int              yy_acount = 0;
+ static struct ConfItem *yy_hconf;
+Only in ircd-hybrid-7.0.3/src: ircd_parser.y~
